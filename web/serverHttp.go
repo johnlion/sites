@@ -20,8 +20,12 @@ func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	/* web 输出  */
 	fmt.Fprint( res, "This is a test" )
+
+	/* Debug */
 	w.Debug( "This is a test" )
+
+	/* Log */
 	w.Log(  res.Header().Get( "User-Agent" ) )
-	/* command 输出 */
+
 
 }
