@@ -22,8 +22,6 @@ const (
 	HTTP_READ_TIME_OUT =  10 * time.Second
 	HTTP_WRITE_TIME_OUT  =  10 * time.Second
 
-	WORK_BASE_DIR = ""
-
 	DEBUG = true
 	LOG_WRITE = true
 	LOG_BASE_DIR = "/tmp/log/web/"
