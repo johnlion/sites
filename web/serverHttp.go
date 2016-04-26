@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 	"fmt"
+
 )
 /*********************************************
  * Author: chandlerxue
@@ -12,6 +13,15 @@ import (
  * Desc:
  *********************************************/
 func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	w.Debug( req.URL.Path  )
+	var html string
+	err, html := w.Router( req )
+	if err != nil{
+	}
+	if html ==""{
+		html = "This is the default html page."
+	}
+
 
 	/* 设置 Response Header */
 	for i,v := range w.Header{
@@ -19,10 +29,7 @@ func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 
 	/* web 输出  */
-	fmt.Fprint( res, "This is a test" )
-
-	/* Debug */
-	w.Debug( "This is a test" )
+	fmt.Fprint( res, html )
 
 	/* Log */
 	w.Log(  res.Header().Get( "User-Agent" ) )

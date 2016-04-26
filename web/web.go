@@ -61,11 +61,6 @@ func (w *Web ) SetHeader ( header map[string]string ){
 	w.Header =  header
 }
 
-
-
-
-
-
 /*********************************************
  * Author: chandlerxue
  * Email: xps_8@hotmail.com
