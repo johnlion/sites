@@ -4,11 +4,14 @@ import (
 	"flag"
 	"net/http"
 	"fmt"
+	"log"
 )
 
 type Web struct {
 	Domain *string
 	Protocol *string
+	Server *http.Server
+	Header map[string]string
 
 }
 
@@ -20,10 +23,19 @@ type Web struct {
  * Desc: 类构造器
  *********************************************/
 func Web_constract() *Web{
-	var web Web
 	flag.Parse()
+
+	/* 初始化属性 */
+	var web Web
 	web.Domain = target
 	web.Protocol = protocol
+	web.Header = map[string]string{
+			"Server":"www.baidu.com",
+			"Content-Type":"text/plain; charset=utf-8",
+			"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.86 Safari/537.36",
+			"Referer":"www.baidu.com",
+	}
+
 	return &web
 }
 
@@ -32,13 +44,67 @@ func Web_constract() *Web{
  * Email: xps_8@hotmail.com
  * Date: 2016年4月25日 上午11:09
  * Func: RunWebServer
- * Desc: web package entry
+ * Desc: web package entry  运行并监听
  *********************************************/
 func ( w *Web ) RunWebServer( ){
-	http.ListenAndServe(":9090",  w )
+	//http.ListenAndServe( DOMAIN_ADDR ,  w )
+	w.Server = &http.Server{
+		Addr:           DOMAIN_ADDR,
+		Handler:        w,
+		ReadTimeout:    HTTP_READ_TIME_OUT,
+		WriteTimeout:   HTTP_WRITE_TIME_OUT,
+		MaxHeaderBytes: 1 << 20,
+	}
+	log.Fatal(w.Server.ListenAndServe())
+
 }
 
-func ( w*Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf( res, "This is a test!" + *w.Domain )
+/*********************************************
+ * Author: chandlerxue
+ * Email: xps_8@hotmail.com
+ * Date: 2016年4月25日 下午1:37
+ * Func: ServeHTTP
+ * Desc:
+ *********************************************/
+func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+
+	/* 设置 Response Header */
+	for i,v := range w.Header{
+		res.Header().Set( i, v )
+	}
+
+	/* web 输出  */
+	fmt.Fprint( res, "This is a test" )
+	w.Debug( "This is a test" )
+	w.Log(  res.Header().Get( "User-Agent" ) )
+	/* command 输出 */
 
 }
+
+func (w *Web ) SetHeader ( header map[string]string ){
+	w.Header =  header
+}
+
+
+
+
+
+
+/*********************************************
+ * Author: chandlerxue
+ * Email: xps_8@hotmail.com
+ * Date: 2016年4月25日 下午2:55
+ * Func: copyHeader
+ * Desc: 复制Respose
+ *********************************************/
+func (w *Web ) CopyHeader(source http.Header, dest *http.Header) *http.Header{
+	for n, v := range source {
+		for _, vv := range v {
+			dest.Add(n, vv)
+		}
+	}
+	return dest
+}
+
+
+
