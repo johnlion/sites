@@ -39,12 +39,6 @@ func ( w *Web ) Log( str string  ) bool{
 	defer w.Check( fo.Close() )
 	return true
 
-
-
-
-
-
-
 	// close fi on exit and check for its returned error
 	//os.Exit(1)
 
