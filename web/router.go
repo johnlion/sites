@@ -1,15 +1,14 @@
 package web
 
 import (
-	"net/http"
 	"errors"
 )
 
-func ( w *Web ) Router( req *http.Request ) (error,string){
-	if req.URL.Path == "/xxx" {
+func ( w *Web ) Router( requestURI string ) (error,string){
+	if requestURI == "/xxx" {
 		return nil,"This is a valid router"
 	}
 
-	return errors.New( req.URL.Path + " is a unvalid router"),""
+	return errors.New( requestURI + " is a unvalid router"),""
 
 }

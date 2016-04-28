@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 	"log"
+	"github.com/johnlion/sites/config"
 )
 /*********************************************
  * Author: chandlerxue
@@ -14,10 +15,10 @@ import (
 func ( w *Web ) RunWebServer( ){
 	//http.ListenAndServe( DOMAIN_ADDR ,  w )
 	w.Server = &http.Server{
-		Addr:           DOMAIN_ADDR,
+		Addr:           config.DOMAIN_ADDR,
 		Handler:        w,
-		ReadTimeout:    HTTP_READ_TIME_OUT,
-		WriteTimeout:   HTTP_WRITE_TIME_OUT,
+		ReadTimeout:    config.HTTP_READ_TIME_OUT,
+		WriteTimeout:   config.HTTP_WRITE_TIME_OUT,
 		MaxHeaderBytes: 1 << 20,
 	}
 	log.Fatal(w.Server.ListenAndServe())

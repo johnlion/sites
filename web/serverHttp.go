@@ -2,8 +2,10 @@ package web
 
 import (
 	"net/http"
+	"github.com/johnlion/sites/proxy"
 	"fmt"
 
+	"time"
 )
 /*********************************************
  * Author: chandlerxue
@@ -13,26 +15,19 @@ import (
  * Desc:
  *********************************************/
 func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	w.Debug( req.URL.Path  )
+	res.WriteHeader(http.StatusOK)
+	/* 从数据库到得HTML内容 */
 	var html string
-	err, html := w.Router( req )
-	if err != nil{
+	err, html := w.Router( req.RequestURI )
+	if err != nil{//没有取到,从远程服务器获取
+		ObjProxy := proxy.Proxy_constract( *target, *protocol  , req )             //实例化代理
+		go ObjProxy.ReProxy( res, req )
+		time.Sleep( time.Second )
+	}else{
+		fmt.Fprint( res, html )
 	}
-	if html ==""{
-		html = "This is the default html page."
-	}
-
-
-	/* 设置 Response Header */
-	for i,v := range w.Header{
-		res.Header().Set( i, v )
-	}
-
-	/* web 输出  */
-	fmt.Fprint( res, html )
-
 	/* Log */
-	w.Log(  res.Header().Get( "User-Agent" ) )
+	//w.Log(  res.Header().Get( "User-Agent" ) )
 
 
 }

@@ -1,8 +1,8 @@
-package web
+package proxy
 
 import (
-	"fmt"
-	"runtime"
+"fmt"
+"runtime"
 	"github.com/johnlion/sites/config"
 )
 
@@ -13,7 +13,7 @@ import (
  * Func: Debug
  * Desc: 输出调试信息到Command Line和LOG File
  *********************************************/
-func (w *Web ) Debug( str string ){
+func (p *Proxy ) Debug( str string ){
 	/* DEBUG */
 	if ( config.DEBUG ){
 		_, file, line, _ := runtime.Caller(1)
@@ -24,7 +24,7 @@ func (w *Web ) Debug( str string ){
 	}
 }
 
-func (w *Web ) DebugArray( str []string ){
+func (p *Proxy ) DebugArray( str []string ){
 	/* DEBUG */
 	if ( config.DEBUG ){
 		_, file, line, _ := runtime.Caller(1)
@@ -34,9 +34,6 @@ func (w *Web ) DebugArray( str []string ){
 		fmt.Printf( "[cgl][debug][content] ... end\n" )
 	}
 }
-
-
-
 
 
 
