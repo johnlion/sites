@@ -35,8 +35,11 @@ const (
 
 	CACHE_DIR = "cache/"
 
-	FILE_DEFAULT_NAME = "index.html"                 //无文件名称使用此名称
+	FILE_DEFAULT_NAME = "index.html"        //无文件名称使用此名称
 	FIELSAVE = true                         //文件保存到本地开启|关闭
+
+
+
 
 
 )
@@ -44,4 +47,11 @@ const (
 const(
 	REG_FILE_SUFFIX = "(.vico)|(.png)|(.jpg)|(.jpeg)|(.gif)|(.svg)|(.bmp)|(.tiff)|(.webp)|(.ico)|(.js)|(.php)|(.asp)"
 	REG_TOTAL_FILENAME ="[a-z0-9._:/#]{1,999}[" + REG_FILE_SUFFIX + "]"
+)
+
+const(
+	DATABASE = false
+	DATABASE_MAIN_TYPE = "mysql"
+	REDIS = false
+
 )

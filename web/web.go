@@ -50,12 +50,12 @@ func Web_constract() *Web{
 	web.LocalDomain = config.DOMAIN
 	web.Domain = target
 	web.Protocol = protocol
-	web.Header = map[string]string{
-			"Server":"www.baidu.com",
-			"Content-Type":"text/plain; charset=utf-8",
-			"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.86 Safari/537.36",
-			"Referer":"www.baidu.com",
-	}
+	//web.Header = map[string]string{
+	//		"Server":"www.baidu.com",
+	//		"Content-Type":"text/plain; charset=utf-8",
+	//		"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.86 Safari/537.36",
+	//		"Referer":"www.baidu.com",
+	//}
 
 	return &web
 }

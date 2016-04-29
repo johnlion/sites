@@ -26,7 +26,6 @@ func ( p *Proxy ) SaveToFile( requestURI string ,body string  ){
 		*/
 
 		url :=  config.IMAGE_DOMAIN_1 + requestURI
-		p.Debug( url )
 
 		fpath :=  config.CACHE_DIR + url
 		dir := filepath.Dir( fpath )

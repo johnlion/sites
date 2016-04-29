@@ -5,7 +5,6 @@ import (
 	"github.com/johnlion/sites/proxy"
 	"fmt"
 
-	//"time"
 )
 /*********************************************
  * Author: chandlerxue

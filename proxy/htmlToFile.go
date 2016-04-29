@@ -7,7 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	//"strings"
-	"regexp"
+	//"regexp"
+
 
 )
 
@@ -35,12 +36,9 @@ func ( p *Proxy ) HtmlToFile( requestURI string ,body string  ){
 		dir := filepath.Dir( fpath )
 
 
-		reg := regexp.MustCompile( config.REG_TOTAL_FILENAME )
-		fpath = reg.FindString( fpath )
 
-		if fpath == ""{
-			fpath = dir + "/" + config.FILE_DEFAULT_NAME
-		}
+		fpath = dir + "/" + config.FILE_DEFAULT_NAME
+
 
 		/* 检测路径是否存在 */
 		if _, err := os.Stat( dir ); os.IsNotExist(err) {
