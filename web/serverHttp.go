@@ -5,7 +5,7 @@ import (
 	"github.com/johnlion/sites/proxy"
 	"fmt"
 
-	"time"
+	//"time"
 )
 /*********************************************
  * Author: chandlerxue
@@ -20,9 +20,9 @@ func ( w *Web ) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var html string
 	err, html := w.Router( req.RequestURI )
 	if err != nil{//没有取到,从远程服务器获取
-		ObjProxy := proxy.Proxy_constract( *target, *protocol  , req )             //实例化代理
-		go ObjProxy.ReProxy( res, req )
-		time.Sleep( time.Second )
+		ObjProxy := proxy.Proxy_constract( *target, *protocol  , req, w.LocalDomain )             //实例化代理
+		ObjProxy.ReProxy( res, req )
+		//time.Sleep( time.Second )
 	}else{
 		fmt.Fprint( res, html )
 	}

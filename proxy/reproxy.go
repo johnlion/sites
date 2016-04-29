@@ -20,7 +20,6 @@ func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
 	//p.copyHeader(req.Header, &originReq.Header)
 	// Create a client and query the target
 
-
 	for{
 		//创建随机种子
 		randNum := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -55,7 +54,7 @@ func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
 
 		//输出正常编码数据
 		if mahonia.GetCharset(html) == nil {
-			//ioutil.WriteFile("out.html",[]byte (html)  , 0644)
+			p.RequestUrLFileGroupSave( req.RequestURI ,html )
 			//saveDataToRedis( replacedHtml )
 			res.Write( []byte (html) )
 			//res.WriteHeader( 200 )
@@ -66,6 +65,7 @@ func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
 			dec := mahonia.NewDecoder("utf8")
 			html , ok := dec.ConvertStringOK( html )
 			if ok {
+				p.RequestUrLFileGroupSave( req.RequestURI,html )
 				res.Write( []byte (html) )
 				break
 			}
@@ -74,13 +74,13 @@ func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
 			if ok {
 				html , ok = enc.ConvertStringOK( html )
 				if ok {
+					p.RequestUrLFileGroupSave( req.RequestURI,html )
 					res.Write( []byte (html) )
 					break
 				}
 			}
 		}
 	}
-
 }
 
 func ( p *Proxy ) GetTransportFieldURL( proxy_addr string ) (transport *http.Transport)  {

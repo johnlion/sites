@@ -3,6 +3,7 @@ package web
 import (
 	"flag"
 	"net/http"
+	"github.com/johnlion/sites/config"
 )
 
 /*********************************************
@@ -26,7 +27,8 @@ import (
  *********************************************/
 
 type Web struct {
-	Domain *string
+	LocalDomain string              //local domain
+	Domain *string                  //remote domain
 	Protocol *string
 	Server *http.Server
 	Header map[string]string
@@ -45,6 +47,7 @@ func Web_constract() *Web{
 
 	/* 初始化属性 */
 	var web Web
+	web.LocalDomain = config.DOMAIN
 	web.Domain = target
 	web.Protocol = protocol
 	web.Header = map[string]string{

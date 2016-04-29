@@ -19,13 +19,15 @@ import (
  * File: Proxy
  * Desc: 代理列表类
  * Example
-	ObjProxy := proxy.Proxy_constract( *target, *protocol )
+	ObjProxy := proxy.Proxy_constract( *target, *protocol  , req, w.LocalDomain )             //实例化代理
+	ObjProxy.ReProxy( res, req, req.RequestURI )
  *********************************************/
 type Proxy struct{
 	ProxyList  []string
 	Target string
 	Protocol string
 	Url string
+	LocalDomain string
 }
 
 /*********************************************
@@ -35,15 +37,18 @@ type Proxy struct{
  * Func: Proxy_constract
  * Desc: 构造函数
  * Param:
- * target string
- * protocol string
+ * target string        远程主机
+ * protocol string      http 协议
+ * req *http.Request
+ * localDomain string 本地域名
  *********************************************/
-func Proxy_constract( target string, protocol string ,req *http.Request ) *Proxy{
+func Proxy_constract( target string, protocol string ,req *http.Request ,localDomain string ) *Proxy{
 	var proxy Proxy
 	proxy.GetProxyList("")
 	proxy.Target = target
 	proxy.Protocol = protocol
 	proxy.Url = protocol + "://" + target + req.RequestURI
+	proxy.LocalDomain = localDomain
 	return &proxy
 }
 
@@ -68,7 +73,7 @@ func ( p *Proxy) GetProxyList( file string ) ([]string,error){
  * author: chandlerxue
  * date: 2016年4月19日
  * func:
- * desc:读取文件行,返回[]bytes,否则反回 nil
+ * desc:文件行,返回[]bytes,否则反回 nil
  * ****************************************/
 func ( p *Proxy) ReadLine( filePath string, hookfn func( []byte ) )  error{
 	currentDir := p.GetCurrentPath()//当前文件夹
@@ -80,7 +85,6 @@ func ( p *Proxy) ReadLine( filePath string, hookfn func( []byte ) )  error{
 	}
 	defer  file.Close()
 	bfRd := bufio.NewReader( file )
-	fmt.Println( "ProxyList ReadLine ......Start" )
 	for{
 		line, err := bfRd.ReadBytes( '\n' )
 		hookfn( line )  //放在错误处理前面，即使发生错误，也会处理已经读取到的数据。
@@ -108,7 +112,7 @@ func ( p *Proxy) GetCurrentPath() string{
 	if !ok {
 		panic("No caller information")
 	}
-	fmt.Printf("Filename : %q, Dir : %q\n", filename, path.Dir(filename))
+	//fmt.Printf("Filename : %q, Dir : %q\n", filename, path.Dir(filename))
 	return  path.Dir(filename)
 }
 
@@ -121,7 +125,7 @@ func ( p *Proxy) GetCurrentPath() string{
  * ****************************************/
 func ( p *Proxy) ProcessLine( line []byte ){
 	p.ProxyList = append( p.ProxyList , strings.TrimSpace(  string( line)    ) )
-	fmt.Printf( "%s\n","...ProxyList->... " +  strings.TrimSpace(  string( line)    )  )
+	//p.Debug( "...ProxyList->... " +  strings.TrimSpace(  string( line)    )  )
 }
 
 
