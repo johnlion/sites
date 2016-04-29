@@ -30,7 +30,7 @@ type Web struct {
 	LocalDomain string              //local domain
 	Domain *string                  //remote domain
 	Protocol *string
-	Server *http.Server
+	Server map[int]*http.Server
 	Header map[string]string
 
 }

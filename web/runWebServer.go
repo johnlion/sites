@@ -2,8 +2,9 @@ package web
 
 import (
 	"net/http"
-	"log"
+	//"log"
 	"github.com/johnlion/sites/config"
+	"strconv"
 )
 /*********************************************
  * Author: chandlerxue
@@ -14,6 +15,7 @@ import (
  *********************************************/
 func ( w *Web ) RunWebServer( ){
 	//http.ListenAndServe( DOMAIN_ADDR ,  w )
+	/*
 	w.Server = &http.Server{
 		Addr:           config.DOMAIN_ADDR,
 		Handler:        w,
@@ -21,6 +23,24 @@ func ( w *Web ) RunWebServer( ){
 		WriteTimeout:   config.HTTP_WRITE_TIME_OUT,
 		MaxHeaderBytes: 1 << 20,
 	}
-	log.Fatal(w.Server.ListenAndServe())
+
+	*/
+	w.Server =  map[int]*http.Server{
+		1: &http.Server{ Addr: config.DOMAIN_ADDR, Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,  },
+		2: &http.Server{ Addr: "127.0.0.1:9091", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		3: &http.Server{ Addr: "127.0.0.1:9092", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+	}
+
+	done := make(chan bool)
+	for key,val := range w.Server{
+		go w.Debug( "Server [" +  strconv.Itoa(key) + "] Start Listen And Server ...... " )
+		go w.Log( "Server [" +  strconv.Itoa(key) + "] Start Listen And Server ...... " )
+		go val.ListenAndServe()
+
+
+	}
+	<-done
+
+
 
 }
