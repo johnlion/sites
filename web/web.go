@@ -2,7 +2,7 @@ package web
 
 import (
 	"flag"
-	"github.com/johnlion/sites/config"
+	//"github.com/johnlion/sites/config"
 	"net/http"
 )
 
@@ -46,7 +46,6 @@ func Web_constract() *Web {
 
 	/* 初始化属性 */
 	var web Web
-	web.LocalDomain = config.DOMAIN
 	web.Domain = target
 	web.Scheme = scheme
 	//web.Header = map[string]string{

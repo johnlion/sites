@@ -16,9 +16,7 @@ const (
 	TARGET = "www.baidu.com"
 	PROTOCAL = "http"       //"http|https|sockets|..."
 
-	DOMAIN = "127.0.0.1"                    //域名
-	DOMAIN_PORT = "9090"                    //域名端口
-	DOMAIN_ADDR = DOMAIN + ":"  + DOMAIN_PORT//域名完整地址
+
 
 	IMAGE_DOMAIN_1 = "127.0.0.1:9090"       //图片服务器1
 	IMAGE_DOMAIN_2 = "127.0.0.1:9090"       //图片服务器2
@@ -28,8 +26,9 @@ const (
 
 	DEBUG = true
 	LOG_WRITE = true
-	LOG_BASE_DIR = "/tmp/log/web/"
-	LOG_DIR_FILE = LOG_BASE_DIR + DOMAIN
+	LOG_BASE_DIR = "/tmp/log/web"
+	LOG_Default_ACCESS_DIR = LOG_BASE_DIR + "/" + "access.log"
+
 
 	PROXY_STATUS = false                    //开启/关闭代理
 
@@ -37,9 +36,6 @@ const (
 
 	FILE_DEFAULT_NAME = "index.html"        //无文件名称使用此名称
 	FIELSAVE = true                         //文件保存到本地开启|关闭
-
-
-
 
 
 )

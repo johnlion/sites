@@ -1,10 +1,9 @@
 package web
 
-import(
+import (
 	"os"
 	"time"
 	"github.com/johnlion/sites/config"
-	"net/http"
 )
 
 /*********************************************
@@ -14,7 +13,7 @@ import(
  * Func: Log
  * Desc: 日志写入到文件,并返回true;否则,反回false
  *********************************************/
-func ( w *Web ) Log( req *http.Request, str string   ) bool{
+func ( w *Web ) LogText( str string   ) bool{
 	/* LOG */
 	if ( !config.LOG_WRITE ){
 		return false
@@ -30,13 +29,13 @@ func ( w *Web ) Log( req *http.Request, str string   ) bool{
 	}
 
 	/* 打开文件 */
-	fpath := config.LOG_BASE_DIR + req.URL.Host
+	fpath := config.LOG_Default_ACCESS_DIR
 	fo,err := os.OpenFile( fpath , os.O_APPEND|os.O_WRONLY |os.O_CREATE  , 0777  )
 	w.Check(err )
 
 	/* 写入文件 */
 	str = "[cgl][log][" + time.Now().Format("2006-01-02 15:04:05")  +  "] " +  str + "\n";
-	 _, err = fo.WriteString(str);
+	_, err = fo.WriteString(str);
 	w.Check( err )
 
 	defer w.Check( fo.Close() )
@@ -46,4 +45,5 @@ func ( w *Web ) Log( req *http.Request, str string   ) bool{
 	//os.Exit(1)
 
 }
+
 

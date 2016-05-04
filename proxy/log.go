@@ -4,6 +4,7 @@ import(
 	"os"
 	"time"
 	"github.com/johnlion/sites/config"
+	"net/http"
 )
 
 /*********************************************
@@ -13,7 +14,7 @@ import(
  * Func: Log
  * Desc: 日志写入到文件,并返回true;否则,反回false
  *********************************************/
-func ( p *Proxy ) Log( str string  ) bool{
+func ( p *Proxy ) Log( req *http.Request, str string  ) bool{
 	/* LOG */
 	if ( !config.LOG_WRITE ){
 		return false
@@ -29,7 +30,9 @@ func ( p *Proxy ) Log( str string  ) bool{
 	}
 
 	/* 打开文件 */
-	fo,err := os.OpenFile( config.LOG_DIR_FILE , os.O_APPEND|os.O_WRONLY |os.O_CREATE  , 0777  )
+	/* 打开文件 */
+	fpath := config.LOG_BASE_DIR + req.URL.Host
+	fo,err := os.OpenFile( fpath , os.O_APPEND|os.O_WRONLY |os.O_CREATE  , 0777  )
 	p.Check(err )
 
 	/* 写入文件 */
