@@ -11,5 +11,5 @@ import "flag"
 
 var (
 	target *string = flag.String("target", TARGET, "target remote url")
-	scheme *string = flag.String("scheme", PROTOCAL, "Secure Hypertext Transfer Scheme")
+	scheme *string = flag.String("scheme", SCHEME, "Secure Hypertext Transfer Scheme")
 )

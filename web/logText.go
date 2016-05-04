@@ -9,8 +9,8 @@ import (
 /*********************************************
  * Author: chandlerxue
  * Email: xps_8@hotmail.com
- * Date: 2016年4月26日 下午1:55
- * Func: Log
+ * Date: 2016年5月4日 上午11:28
+ * Func: LogText
  * Desc: 日志写入到文件,并返回true;否则,反回false
  *********************************************/
 func ( w *Web ) LogText( str string   ) bool{
