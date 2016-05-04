@@ -46,7 +46,7 @@ const (
 
 const(
 	REG_FILE_SUFFIX = "(.vico)|(.png)|(.jpg)|(.jpeg)|(.gif)|(.svg)|(.bmp)|(.tiff)|(.webp)|(.ico)|(.js)|(.php)|(.asp)"
-	REG_TOTAL_FILENAME ="[a-z0-9._:/#]{1,999}[" + REG_FILE_SUFFIX + "]"
+	REG_TOTAL_FILENAME ="[a-zA-Z0-9._:/#]{1,999}[" + REG_FILE_SUFFIX + "]"
 )
 
 const(

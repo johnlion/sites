@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"net/http"
 )
 
 /*********************************************
@@ -16,7 +17,7 @@ import (
  * Func: SaveImage
  * Desc: 保存图片到指定位置
  *********************************************/
-func ( p *Proxy ) SaveToImage( requestURI string ,body string  ){
+func ( p *Proxy ) SaveToImage( req *http.Request ,body string  ){
 	for{
 
 		//p.Debug( p.LocalDomain )
@@ -25,7 +26,7 @@ func ( p *Proxy ) SaveToImage( requestURI string ,body string  ){
 
 
 
-		url :=  config.IMAGE_DOMAIN_1 + requestURI
+		url :=  req.Host + req.URL.RequestURI()
 		fpath :=  config.CACHE_DIR + url
 		dir := filepath.Dir( fpath )
 

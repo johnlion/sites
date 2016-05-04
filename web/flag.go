@@ -1,4 +1,5 @@
 package web
+
 /*********************************************
  * Author: chandlerxue
  * Email: xps_8@hotmail.com
@@ -8,9 +9,7 @@ package web
  *********************************************/
 import "flag"
 
-
-var(
-	target *string = flag.String( "target", TARGET , "target remote url"  )
-	protocol *string = flag.String( "protocol", PROTOCAL , "Secure Hypertext Transfer Protocol"  )
+var (
+	target *string = flag.String("target", TARGET, "target remote url")
+	scheme *string = flag.String("scheme", PROTOCAL, "Secure Hypertext Transfer Scheme")
 )
-

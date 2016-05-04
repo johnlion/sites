@@ -1,81 +1,78 @@
 package proxy
 
 import (
-	"net/http"
-	"github.com/johnlion/sites/config"
-	"time"
-	"math/rand"
 	"fmt"
-	"net/url"
-	"io/ioutil"
-	"github.com/johnlion/sites/seo"
 	"github.com/johnlion/mahonia"
-
+	"github.com/johnlion/sites/config"
+	"github.com/johnlion/sites/seo"
+	"io/ioutil"
+	"math/rand"
+	"net/http"
+	"net/url"
+	"time"
 )
 
-func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
-
-	originReq, err := http.NewRequest( req.Method, p.Url, req.Body )
-	p.Check( err )
+func (p *Proxy) ReProxy(res http.ResponseWriter, req *http.Request) {
+	originReq, err := http.NewRequest(req.Method, p.Url, req.Body)
+	p.Check(err)
 	//p.copyHeader(req.Header, &originReq.Header)
 	// Create a client and query the target
 
-	for{
+	for {
 		//创建随机种子
 		randNum := rand.New(rand.NewSource(time.Now().UnixNano()))
-		i := randNum.Intn( len( p.ProxyList ) )
+		i := randNum.Intn(len(p.ProxyList))
 
 		// --var transport http.Transport
 		var transport http.Transport
-		if  config.PROXY_STATUS {
+		if config.PROXY_STATUS {
 			transport = *p.GetTransportFieldURL(p.ProxyList[i])
 		}
-		originResp, err := transport.RoundTrip( originReq )
-		if ( err !=nil ){
+		originResp, err := transport.RoundTrip(originReq)
+		if err != nil {
 			continue
 		}
-		fmt.Printf("Resp-Headers: %v\n", originResp.Header);
+		fmt.Printf("Resp-Headers: %v\n", originResp.Header)
 		defer originResp.Body.Close()
 
 		//res.WriteHeader(originResp.StatusCode)
 		body, err := ioutil.ReadAll(originResp.Body)
-		if err !=nil  {
+		if err != nil {
 			continue
 		}
-		html := string( body )
+		html := string(body)
 
 		dH := res.Header()
 		p.copyHeader(originResp.Header, &dH)
 		dH.Add("Requested-Host", originReq.Host)
 
-
-		ObjSeo := seo.Seo_constract( p.Target, p.Protocol )
-		html = string( ObjSeo.RegProcess( html ) )
+		ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
+		html = string(ObjSeo.RegProcess(html))
 
 		//输出正常编码数据
 		if mahonia.GetCharset(html) == nil {
-			p.RequestUrLFileGroupSave( req.RequestURI ,html )
+			p.RequestUrLFileGroupSave(req, html)
 			//saveDataToRedis( replacedHtml )
-			res.Write( []byte (html) )
+			res.Write([]byte(html))
 			//res.WriteHeader( 200 )
 			//fmt.Fprint( res, html )
 			break
-		}else{
+		} else {
 			enc := mahonia.NewEncoder("utf8")
 			dec := mahonia.NewDecoder("utf8")
-			html , ok := dec.ConvertStringOK( html )
+			html, ok := dec.ConvertStringOK(html)
 			if ok {
-				p.RequestUrLFileGroupSave( req.RequestURI,html )
-				res.Write( []byte (html) )
+				p.RequestUrLFileGroupSave(req, html)
+				res.Write([]byte(html))
 				break
 			}
 			dec = mahonia.NewDecoder("gb18030")
-			html , ok = dec.ConvertStringOK( html )
+			html, ok = dec.ConvertStringOK(html)
 			if ok {
-				html , ok = enc.ConvertStringOK( html )
+				html, ok = enc.ConvertStringOK(html)
 				if ok {
-					p.RequestUrLFileGroupSave( req.RequestURI,html )
-					res.Write( []byte (html) )
+					p.RequestUrLFileGroupSave(req, html)
+					res.Write([]byte(html))
 					break
 				}
 			}
@@ -83,11 +80,11 @@ func ( p *Proxy ) ReProxy( res http.ResponseWriter, req *http.Request ){
 	}
 }
 
-func ( p *Proxy ) GetTransportFieldURL( proxy_addr string ) (transport *http.Transport)  {
+func (p *Proxy) GetTransportFieldURL(proxy_addr string) (transport *http.Transport) {
 	url_i := url.URL{}
-	url_proxy, _ := url_i.Parse(  "http://" +  proxy_addr )
-	fmt.Println( url_proxy )
-	transport = &http.Transport{Proxy : http.ProxyURL(url_proxy)}
+	url_proxy, _ := url_i.Parse("http://" + proxy_addr)
+	fmt.Println(url_proxy)
+	transport = &http.Transport{Proxy: http.ProxyURL(url_proxy)}
 	return
 }
 

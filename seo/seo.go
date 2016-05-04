@@ -1,4 +1,3 @@
-
 package seo
 
 /*********************************************
@@ -8,18 +7,15 @@ package seo
  * File: seo.go
  * Desc:
  *********************************************/
-import (
+import ()
 
-)
-
-type Seo struct{
-	Domain string
-	Title string
+type Seo struct {
+	Domain      string
+	Title       string
 	Description string
-	Keywords string
+	Keywords    string
 	RegParterns map[string]string
 }
-
 
 /*********************************************
  * Author: chandlerxue
@@ -28,32 +24,26 @@ type Seo struct{
  * File:
  * Desc:构造函数
  *********************************************/
-func Seo_constract( target string, protocol string ) *Seo {
+func Seo_constract(target string, scheme string) *Seo {
 	var seo Seo
-	seo.SetKeywords( "this is a keys for objSeo" )
-	seo.SetDescription( "this is a desps for objSeo" )
+	seo.SetKeywords("this is a keys for objSeo")
+	seo.SetDescription("this is a desps for objSeo")
 	//seo.RegParterns = map[string]string{ "A":"This is a", "B":"This is b"}
-	seo.SetRegParterns( map[string]string{
-		`href="`:`href=[\"\']` + protocol + "://" + target,
+	seo.SetRegParterns(map[string]string{
+		`href="`:        `href=[\"\']` + scheme + "://" + target,
 		"charset=utf-8": `charset=[a-z0-9]{0,10}`,
 	})
 	return &seo
 }
 
-func ( s *Seo ) SetKeywords( Keywords string ){
+func (s *Seo) SetKeywords(Keywords string) {
 	s.Keywords = Keywords
 }
 
-func ( s *Seo ) SetDescription( Description string ){
+func (s *Seo) SetDescription(Description string) {
 	s.Description = Description
 }
 
-func ( s *Seo ) SetRegParterns( RegParterns map[string]string  ){
+func (s *Seo) SetRegParterns(RegParterns map[string]string) {
 	s.RegParterns = RegParterns
 }
-
-
-
-
-
-

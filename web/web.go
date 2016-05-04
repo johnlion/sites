@@ -2,8 +2,8 @@ package web
 
 import (
 	"flag"
-	"net/http"
 	"github.com/johnlion/sites/config"
+	"net/http"
 )
 
 /*********************************************
@@ -27,12 +27,11 @@ import (
  *********************************************/
 
 type Web struct {
-	LocalDomain string              //local domain
-	Domain *string                  //remote domain
-	Protocol *string
-	Server map[int]*http.Server
-	Header map[string]string
-
+	LocalDomain string  //local domain
+	Domain      *string //remote domain
+	Scheme      *string
+	Server      map[int]*http.Server
+	Header      map[string]string
 }
 
 /*********************************************
@@ -42,14 +41,14 @@ type Web struct {
  * Func: Web_contract
  * Desc: 类构造器
  *********************************************/
-func Web_constract() *Web{
+func Web_constract() *Web {
 	flag.Parse()
 
 	/* 初始化属性 */
 	var web Web
 	web.LocalDomain = config.DOMAIN
 	web.Domain = target
-	web.Protocol = protocol
+	web.Scheme = scheme
 	//web.Header = map[string]string{
 	//		"Server":"www.baidu.com",
 	//		"Content-Type":"text/plain; charset=utf-8",
@@ -60,8 +59,8 @@ func Web_constract() *Web{
 	return &web
 }
 
-func (w *Web ) SetHeader ( header map[string]string ){
-	w.Header =  header
+func (w *Web) SetHeader(header map[string]string) {
+	w.Header = header
 }
 
 /*********************************************
@@ -71,7 +70,7 @@ func (w *Web ) SetHeader ( header map[string]string ){
  * Func: copyHeader
  * Desc: 复制Respose
  *********************************************/
-func (w *Web ) CopyHeader(source http.Header, dest *http.Header) *http.Header{
+func (w *Web) CopyHeader(source http.Header, dest *http.Header) *http.Header {
 	for n, v := range source {
 		for _, vv := range v {
 			dest.Add(n, vv)
@@ -79,6 +78,3 @@ func (w *Web ) CopyHeader(source http.Header, dest *http.Header) *http.Header{
 	}
 	return dest
 }
-
-
-

@@ -10,6 +10,7 @@ import (
 	//"regexp"
 
 
+	"net/http"
 )
 
 /*********************************************
@@ -19,7 +20,7 @@ import (
  * Func: SaveImage
  * Desc: 保存文件到指定位置
  *********************************************/
-func ( p *Proxy ) HtmlToFile( requestURI string ,body string  ){
+func ( p *Proxy) DefaultToFile( req *http.Request ,body string  ){
 	for{
 		ioutil.WriteFile( "test.html", []byte(body) , 0777)
 
@@ -29,13 +30,10 @@ func ( p *Proxy ) HtmlToFile( requestURI string ,body string  ){
 		p.Debug( config.CACHE_DIR +  config.IMAGE_DOMAIN_1 + requestURI )
 		*/
 
-		url :=  config.IMAGE_DOMAIN_1 + requestURI
-
+		url :=  req.Host + req.URL.RequestURI()
 
 		fpath :=  config.CACHE_DIR + url
 		dir := filepath.Dir( fpath )
-
-
 
 		fpath = dir + "/" + config.FILE_DEFAULT_NAME
 

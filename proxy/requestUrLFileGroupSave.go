@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"github.com/johnlion/sites/config"
 	"regexp"
-
+	"net/http"
 )
 /*********************************************
  * Author: chandlerxue
@@ -13,60 +13,65 @@ import (
  * Func: RequestUrLFileGroup
  * Desc: 分组储存http流数据
  *********************************************/
-func (p *Proxy ) RequestUrLFileGroupSave( requestURI string , content string ){
+func (p *Proxy ) RequestUrLFileGroupSave( req *http.Request , content string ){
 	if ( config.FIELSAVE ){
-		extension := filepath.Base( requestURI )
+		extension := filepath.Base( req.URL.RequestURI()  )
 		reg := regexp.MustCompile( config.REG_FILE_SUFFIX )
 		extension = reg.FindString( extension )
 
 		switch extension {
 		case ".png":
 			//do code
-			p.SaveToImage( requestURI ,content  )
+			p.SaveToImage( req ,content  )
 			break
 		case ".jpg":
 			//do code
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			break
 		case ".jpeg":
 			//do code
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			break
 		case ".gif":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".svg":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".bmp":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".tiff":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			break
 		case ".webp":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".ico":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".vico":
-			p.SaveToImage( requestURI ,content )
+			p.SaveToImage( req  ,content )
 			//do code
 			break
 		case ".js":
-			p.SaveToFile( requestURI ,content )
+			p.SaveToFile( req  ,content )
 			//do code
 			break
+		case ".html":
+			p.SaveToFile( req  ,content )
+			//do code
+			break
+		case ".htm":
+			p.SaveToFile( req  ,content )
+			break
 		default:
-
-
-			p.HtmlToFile( requestURI, content )
+			p.DefaultToFile( req , content )
 
 
 			//save to mongodb

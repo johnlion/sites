@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	//"strings"
 	"regexp"
+	"net/http"
 )
 
 /*********************************************
@@ -17,7 +18,7 @@ import (
  * Func: SaveImage
  * Desc: 保存文件到指定位置
  *********************************************/
-func ( p *Proxy ) SaveToFile( requestURI string ,body string  ){
+func ( p *Proxy ) SaveToFile( req *http.Request ,body string  ){
 	for{
 		/*
 		p.Debug( p.LocalDomain )
@@ -25,15 +26,15 @@ func ( p *Proxy ) SaveToFile( requestURI string ,body string  ){
 		p.Debug( config.CACHE_DIR +  config.IMAGE_DOMAIN_1 + requestURI )
 		*/
 
-		url :=  config.IMAGE_DOMAIN_1 + requestURI
+		url :=  req.Host + req.URL.RequestURI()
 
 		fpath :=  config.CACHE_DIR + url
+
 		dir := filepath.Dir( fpath )
 
 
 		reg := regexp.MustCompile( config.REG_TOTAL_FILENAME )
 		fpath = reg.FindString( fpath )
-
 
 		/* 检测路径是否存在 */
 		if _, err := os.Stat( dir ); os.IsNotExist(err) {
