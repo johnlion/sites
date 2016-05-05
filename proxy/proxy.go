@@ -10,6 +10,7 @@ import (
 	"path"
 	"runtime"
 	"strings"
+	"github.com/garyburd/redigo/redis"
 )
 
 /*********************************************
@@ -28,6 +29,7 @@ type Proxy struct {
 	Scheme      string
 	Url         string
 	LocalDomain string
+	RedisPool   *redis.Pool
 }
 
 /*********************************************
@@ -49,6 +51,7 @@ func Proxy_constract(target string, scheme string, req *http.Request, localDomai
 	proxy.Scheme = scheme
 	proxy.Url = scheme + "://" + target + req.RequestURI
 	proxy.LocalDomain = localDomain
+	proxy.RedisPool = proxy.NewPool()
 	return &proxy
 }
 

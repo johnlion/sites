@@ -49,3 +49,9 @@ const (
 	DATABASE_MAIN_TYPE = "mysql"
 	REDIS              = false
 )
+
+/* REDIS */
+const(
+	REDIS_ADDR = "127.0.0.1"
+	REDIS_PORT = 6379
+)

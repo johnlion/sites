@@ -12,7 +12,46 @@ import (
 	"time"
 )
 
+
 func (p *Proxy) ReProxy(res http.ResponseWriter, req *http.Request) {
+
+	//数据库访问
+	if  p.dataExisted( res , req  ) {
+		p.visitByDatabase(res, req)
+	}else{
+		//非数据库访问
+		p.visitByRemoteHost( res, req )
+	}
+}
+
+
+func (p *Proxy) GetTransportFieldURL(proxy_addr string) (transport *http.Transport) {
+	url_i := url.URL{}
+	url_proxy, _ := url_i.Parse("http://" + proxy_addr)
+	fmt.Println(url_proxy)
+	transport = &http.Transport{Proxy: http.ProxyURL(url_proxy)}
+	return
+}
+
+func (p *Proxy) copyHeader(source http.Header, dest *http.Header) {
+	for n, v := range source {
+		for _, vv := range v {
+			dest.Add(n, vv)
+		}
+	}
+}
+
+func (p *Proxy) dataExisted ( res http.ResponseWriter, req *http.Request ) bool{
+	return true
+}
+
+func (p *Proxy) visitByDatabase( res http.ResponseWriter, req *http.Request ){
+	p.Debug( "Redis model" )
+	p.RedisServer( res, req )
+
+}
+
+func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 	originReq, err := http.NewRequest(req.Method, p.Url, req.Body)
 	p.Check(err)
 	//p.copyHeader(req.Header, &originReq.Header)
@@ -76,22 +115,6 @@ func (p *Proxy) ReProxy(res http.ResponseWriter, req *http.Request) {
 					break
 				}
 			}
-		}
-	}
-}
-
-func (p *Proxy) GetTransportFieldURL(proxy_addr string) (transport *http.Transport) {
-	url_i := url.URL{}
-	url_proxy, _ := url_i.Parse("http://" + proxy_addr)
-	fmt.Println(url_proxy)
-	transport = &http.Transport{Proxy: http.ProxyURL(url_proxy)}
-	return
-}
-
-func (p *Proxy) copyHeader(source http.Header, dest *http.Header) {
-	for n, v := range source {
-		for _, vv := range v {
-			dest.Add(n, vv)
 		}
 	}
 }
