@@ -31,12 +31,12 @@ func ( w *Web ) RunWebServer( ){
 		1: &http.Server{ Addr: "127.0.0.1:9090", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
 		2: &http.Server{ Addr: "127.0.0.1:9091", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
 		3: &http.Server{ Addr: "127.0.0.1:9092", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		4: &http.Server{ Addr: "127.0.0.1:9093", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		5: &http.Server{ Addr: "127.0.0.1:9094", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		6: &http.Server{ Addr: "127.0.0.1:9095", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		7: &http.Server{ Addr: "127.0.0.1:9096", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		8: &http.Server{ Addr: "127.0.0.1:9097", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
-		9: &http.Server{ Addr: "127.0.0.1:9098", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//4: &http.Server{ Addr: "127.0.0.1:9093", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//5: &http.Server{ Addr: "127.0.0.1:9094", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//6: &http.Server{ Addr: "127.0.0.1:9095", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//7: &http.Server{ Addr: "127.0.0.1:9096", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//8: &http.Server{ Addr: "127.0.0.1:9097", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		//9: &http.Server{ Addr: "127.0.0.1:9098", Handler: w,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
 
 		//more server...
 	}

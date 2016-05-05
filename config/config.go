@@ -54,4 +54,8 @@ const (
 const(
 	REDIS_ADDR = "127.0.0.1"
 	REDIS_PORT = 6379
+	REDIS_MAXIDLE = 80
+	REDIS_MAXACTIVE = 12000
+	REDIS_IMAGE = true
+
 )

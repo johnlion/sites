@@ -24,8 +24,6 @@ func ( p *Proxy ) SaveToImage( req *http.Request ,body string  ){
 		//p.Debug( requestURI )
 		//p.Debug( config.CACHE_DIR +  config.IMAGE_DOMAIN_1 + requestURI )
 
-
-
 		url :=  req.Host + req.URL.RequestURI()
 		fpath :=  config.CACHE_DIR + url
 		dir := filepath.Dir( fpath )
@@ -46,6 +44,11 @@ func ( p *Proxy ) SaveToImage( req *http.Request ,body string  ){
 
 
 		err := ioutil.WriteFile( fpath ,[]byte ( body )  , 0644)
+		if config.REDIS_IMAGE {
+			p.RedisServerNoResponse( req , body )
+		}else{
+			p.RedisServerNoResponse( req , "1" )
+		}
 		p.Check( err )
 		break
 	}

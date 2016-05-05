@@ -41,13 +41,21 @@ func (p *Proxy) copyHeader(source http.Header, dest *http.Header) {
 	}
 }
 
+/*********************************************
+ * Author: chandlerxue
+ * Email: xps_8@hotmail.com
+ * Date: 2016年5月5日 下午2:32
+ * Func: dataExisted
+ * Desc: 数据是否存在; 存在返回true,否则反回false
+ *********************************************/
 func (p *Proxy) dataExisted ( res http.ResponseWriter, req *http.Request ) bool{
-	return true
+	return p.RedisKeyExisted( req )
 }
 
 func (p *Proxy) visitByDatabase( res http.ResponseWriter, req *http.Request ){
 	p.Debug( "Redis model" )
-	p.RedisServer( res, req )
+	body := ""
+	p.RedisServer( res, req ,body )
 
 }
 
