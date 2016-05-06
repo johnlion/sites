@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"fmt"
-	//"github.com/johnlion/mahonia"
 	"github.com/johnlion/sites/config"
 	"github.com/johnlion/sites/seo"
 	"io/ioutil"
@@ -111,13 +110,10 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 
 
-		bytesRead , bytesWritten, err:= iconv.Convert( body, out, "gbk", "utf-8" )
+		_ , _, err = iconv.Convert( body, out, "gbk", "utf-8" )
 		if err == nil {
 			//ioutil.WriteFile("output.html", out, 0666)
 
-			fmt.Println(bytesRead)
-			fmt.Println(bytesWritten)
-			fmt.Println(err)
 
 			//SEO && DECODE
 			html := string(out)
@@ -126,7 +122,6 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 			html = string(resourceHtml)
 
-			fmt.Printf("%v", html)
 			p.RequestUrLFileGroupSave(req, html)
 			res.Write(resourceHtml)
 			break
@@ -138,7 +133,6 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 			html = string(resourceHtml)
 
-			fmt.Printf("%v", html)
 			p.RequestUrLFileGroupSave(req, html)
 			res.Write(resourceHtml)
 			break
