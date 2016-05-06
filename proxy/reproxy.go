@@ -2,7 +2,7 @@ package proxy
 
 import (
 	"fmt"
-	"github.com/johnlion/mahonia"
+	//"github.com/johnlion/mahonia"
 	"github.com/johnlion/sites/config"
 	"github.com/johnlion/sites/seo"
 	"io/ioutil"
@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+	"github.com/djimenez/iconv-go"
+
 )
 
 
@@ -33,13 +35,18 @@ func (p *Proxy) GetTransportFieldURL(proxy_addr string) (transport *http.Transpo
 	return
 }
 
-func (p *Proxy) copyHeader(source http.Header, dest *http.Header) {
+func (p *Proxy) CopyHeader(source http.Header, dest *http.Header) {
 	for n, v := range source {
 		for _, vv := range v {
 			dest.Add(n, vv)
 		}
 	}
 }
+
+func (p *Proxy) CopyCookies( source http.Cookie, dest *http.Cookie ){
+
+}
+
 
 /*********************************************
  * Author: chandlerxue
@@ -60,6 +67,8 @@ func (p *Proxy) visitByDatabase( res http.ResponseWriter, req *http.Request ){
 }
 
 func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
+	cookie1 := &http.Cookie{Name: "sample", Value: "sample", HttpOnly: false}
+	http.SetCookie(res, cookie1)
 	originReq, err := http.NewRequest(req.Method, p.Url, req.Body)
 	p.Check(err)
 	//p.copyHeader(req.Header, &originReq.Header)
@@ -87,16 +96,60 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 		if err != nil {
 			continue
 		}
-		html := string(body)
+
 
 		dH := res.Header()
-		p.copyHeader(originResp.Header, &dH)
+
+
+		p.CopyHeader(originResp.Header, &dH)
 		dH.Add("Requested-Host", originReq.Host)
 
-		ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
-		html = string(ObjSeo.RegProcess(html))
+
+		out:=make([]byte,len(body) *2 )
+		out=out[:]
+		fmt.Println( len( string( body ) ) )
+
+
+
+		bytesRead , bytesWritten, err:= iconv.Convert( body, out, "gbk", "utf-8" )
+		if err == nil {
+			//ioutil.WriteFile("output.html", out, 0666)
+
+			fmt.Println(bytesRead)
+			fmt.Println(bytesWritten)
+			fmt.Println(err)
+
+			//SEO && DECODE
+			html := string(out)
+			ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
+			resourceHtml := ObjSeo.RegProcess(html)
+
+			html = string(resourceHtml)
+
+			fmt.Printf("%v", html)
+			p.RequestUrLFileGroupSave(req, html)
+			res.Write(resourceHtml)
+			break
+		}else{
+			//SEO && DECODE
+			html := string(body)
+			ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
+			resourceHtml := ObjSeo.RegProcess(html)
+
+			html = string(resourceHtml)
+
+			fmt.Printf("%v", html)
+			p.RequestUrLFileGroupSave(req, html)
+			res.Write(resourceHtml)
+			break
+		}
+
+
+
+
 
 		//输出正常编码数据
+		/*
 		if mahonia.GetCharset(html) == nil {
 			p.RequestUrLFileGroupSave(req, html)
 			//saveDataToRedis( replacedHtml )
@@ -124,5 +177,6 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 				}
 			}
 		}
+		*/
 	}
 }

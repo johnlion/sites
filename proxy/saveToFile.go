@@ -47,7 +47,9 @@ func ( p *Proxy ) SaveToFile( req *http.Request ,body string  ){
 
 
 		err := ioutil.WriteFile( fpath ,[]byte ( body )  , 0644)
-		p.RedisServerNoResponse( req ,body )
+		if config.REDIS_FILE {
+			p.RedisServerNoResponse( req ,body )
+		}
 		p.Check( err )
 		break
 	}
