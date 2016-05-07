@@ -8,6 +8,13 @@ package seo
  * Desc:
  *********************************************/
 import ()
+import (
+	"net/http"
+	"os"
+	"fmt"
+	"github.com/johnlion/sites/config"
+	"strings"
+)
 
 type Seo struct {
 	Domain      string
@@ -25,7 +32,7 @@ type Seo struct {
  * File:
  * Desc:构造函数
  *********************************************/
-func Seo_constract(target string, scheme string) *Seo {
+func Seo_constract( req *http.Request,target string, scheme string) *Seo {
 	var seo Seo
 	seo.SetKeywords("this is a keys for objSeo")
 	seo.SetDescription("this is a desps for objSeo")
@@ -34,6 +41,18 @@ func Seo_constract(target string, scheme string) *Seo {
 		`href="`:        `href=[\"\']` + scheme + "://" + target,
 		"charset=utf-8": `charset=[a-z0-9]{0,10}`,
 	})
+
+	invokeMethod := "Reg_" +  strings.Replace(  target, ".", "_", -1  )
+
+	seo.Debug( invokeMethod )
+	InvokeObjectMethod( &seo, invokeMethod )
+
+	if config.SEO_DEBUG {
+		for key,val := range seo.RegParterns{
+			fmt.Println( "   " +  key + " [>] " + val )
+		}
+	os.Exit(1)
+	}
 	return &seo
 }
 

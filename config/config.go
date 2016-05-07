@@ -58,6 +58,9 @@ const(
 	REDIS_MAXACTIVE = 12000
 	REDIS_IMAGE = false
 	REDIS_FILE = false
+)
 
-
+/* SEO */
+const(
+	SEO_DEBUG = true
 )

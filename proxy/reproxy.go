@@ -106,10 +106,6 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 		out:=make([]byte,len(body) *2 )
 		out=out[:]
-		fmt.Println( len( string( body ) ) )
-
-
-
 		_ , _, err = iconv.Convert( body, out, "gbk", "utf-8" )
 		if err == nil {
 			//ioutil.WriteFile("output.html", out, 0666)
@@ -117,7 +113,7 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 			//SEO && DECODE
 			html := string(out)
-			ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
+			ObjSeo := seo.Seo_constract( req, p.Target, p.Scheme)
 			resourceHtml := ObjSeo.RegProcess(html)
 
 			html = string(resourceHtml)
@@ -128,7 +124,7 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 		}else{
 			//SEO && DECODE
 			html := string(body)
-			ObjSeo := seo.Seo_constract(p.Target, p.Scheme)
+			ObjSeo := seo.Seo_constract( req ,p.Target, p.Scheme)
 			resourceHtml := ObjSeo.RegProcess(html)
 
 			html = string(resourceHtml)
