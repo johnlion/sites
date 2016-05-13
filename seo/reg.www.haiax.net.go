@@ -77,7 +77,8 @@ func ( s*Seo ) Reg_Spider_www_haiax_net_index( text string  ) {
 	mapAttr["title"] = "海岸线文学网_海岸线小说网_txt电子书下载_最新章节"
 	mapAttr["keywords"] = "海岸线文学网,免费小说阅读,免费小说下载,最新小说"
 	mapAttr["description"] = "海岸线文学网提供海岸线文学网最热门的小说，海岸线文学网是众多网友自发建立，多位热心书友上传很多珍藏孤本小说，海岸线文学网最懂你的小说网。"
-	mapAttr["host"] = s.HOST
+	mapAttr["host"] = "http://" + s.HOST
+	mapAttr["resourceHost"] = "http://127.0.0.1:8090/"
 	map2[0] = mapAttr
 	map1["site"] = map2
 	map0["siteList"] = map1

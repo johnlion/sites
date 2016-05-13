@@ -65,3 +65,8 @@ const(
 const(
 	SEO_DEBUG = true
 )
+
+/* Template */
+const(
+	TEMPLATE_BASE_DIR = "template/novel"
+)
