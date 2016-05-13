@@ -27,5 +27,4 @@ func (w *Web) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 	/* Log */
 	//w.Log(  res.Header().Get( "User-Agent" ) )
-
 }

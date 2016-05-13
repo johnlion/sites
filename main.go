@@ -1,12 +1,18 @@
 package main
 import (
 	"github.com/johnlion/sites/web"
-	"fmt"
+	"github.com/johnlion/sites/forwardserver"
 )
 
 func main(){
 	ObjWeb := web.Web_constract()
-	ObjWeb.RunWebServer()
-	fmt.Println( *ObjWeb.Domain )
+	ObjForwardserver := forwardserver.Forwardserver_constract()
+
+	done := make(chan bool)
+		go ObjWeb.RunWebServer()
+		go ObjForwardserver.RunWebServer()
+	<-done
+
 }
+
 

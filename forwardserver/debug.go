@@ -1,9 +1,9 @@
-package web
+package forwardserver
 
 import (
-	"fmt"
-	"runtime"
-	"github.com/johnlion/sites/config"
+"fmt"
+"runtime"
+"github.com/johnlion/sites/config"
 )
 
 /*********************************************
@@ -13,7 +13,7 @@ import (
  * Func: Debug
  * Desc: 输出调试信息到Command Line和LOG File
  *********************************************/
-func (f *Web ) Debug( str string ){
+func (f *Forwardserver ) Debug( str string ){
 	/* DEBUG */
 	if ( config.DEBUG ){
 		_, file, line, _ := runtime.Caller(1)
@@ -24,8 +24,8 @@ func (f *Web ) Debug( str string ){
 	}
 }
 
-func (f *Web ) DebugArray( str []string ){
-	/* DEBUG */
+func (f *Forwardserver ) DebugArray( str []string ){
+/* DEBUG */
 	if ( config.DEBUG ){
 		_, file, line, _ := runtime.Caller(1)
 		fmt.Printf( "[cgl][debug] %s:%d \n" , file,line )
