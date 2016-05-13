@@ -117,8 +117,9 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 			resourceHtml := ObjSeo.RegProcess(html)
 
 			html = string(resourceHtml)
-
-			p.RequestUrLFileGroupSave(req, html)
+			if config.REDIS {
+				p.RequestUrLFileGroupSave(req, html)
+			}
 			res.Write(resourceHtml)
 			break
 		}else{
@@ -129,7 +130,9 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 
 			html = string(resourceHtml)
 
-			p.RequestUrLFileGroupSave(req, html)
+			if config.REDIS {
+				p.RequestUrLFileGroupSave(req, html)
+			}
 			res.Write(resourceHtml)
 			break
 		}

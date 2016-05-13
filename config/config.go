@@ -47,11 +47,12 @@ const (
 const (
 	DATABASE           = false
 	DATABASE_MAIN_TYPE = "mysql"
-	REDIS              = false
+
 )
 
 /* REDIS */
 const(
+	REDIS = false
 	REDIS_ADDR = "127.0.0.1"
 	REDIS_PORT = "6379"
 	REDIS_MAXIDLE = 80

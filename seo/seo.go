@@ -10,10 +10,9 @@ package seo
 import ()
 import (
 	"net/http"
-	"os"
 	"fmt"
 	"github.com/johnlion/sites/config"
-	"strings"
+	"html/template"
 )
 
 type Seo struct {
@@ -22,6 +21,13 @@ type Seo struct {
 	Description string
 	Keywords    string
 	RegParterns map[string]string
+	RegParternsSpider map[int]string
+	Target string
+	HOST string             //scheme +"://" + domain
+	RequestURI string       //url path
+	tpl *template.Template
+	text string
+
 }
 
 
@@ -41,17 +47,15 @@ func Seo_constract( req *http.Request,target string, scheme string) *Seo {
 		`href="`:        `href=[\"\']` + scheme + "://" + target,
 		"charset=utf-8": `charset=[a-z0-9]{0,10}`,
 	})
-
-	invokeMethod := "Reg_" +  strings.Replace(  target, ".", "_", -1  )
-
-	seo.Debug( invokeMethod )
-	InvokeObjectMethod( &seo, invokeMethod )
+	seo.Target = target
+	seo.HOST = req.Host
+	seo.RequestURI =  req.URL.RequestURI()
 
 	if config.SEO_DEBUG {
 		for key,val := range seo.RegParterns{
 			fmt.Println( "   " +  key + " [>] " + val )
 		}
-	os.Exit(1)
+
 	}
 	return &seo
 }
