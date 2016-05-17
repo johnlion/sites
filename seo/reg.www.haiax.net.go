@@ -74,11 +74,13 @@ func ( s*Seo ) Reg_Spider_www_haiax_net_index( text string  ) {
 	map1 = make( map[string]map[int]map[string]string )//重构
 	map2 = make( map[int]map[string]string   )//重构
 	mapAttr := make( map[string]string ) //重构
-	mapAttr["title"] = "海岸线文学网_海岸线小说网_txt电子书下载_最新章节"
-	mapAttr["keywords"] = "海岸线文学网,免费小说阅读,免费小说下载,最新小说"
-	mapAttr["description"] = "海岸线文学网提供海岸线文学网最热门的小说，海岸线文学网是众多网友自发建立，多位热心书友上传很多珍藏孤本小说，海岸线文学网最懂你的小说网。"
-	mapAttr["host"] = "http://" + s.HOST
-	mapAttr["resourceHost"] = "http://127.0.0.1:8090/"
+	//mapAttr["title"] = "思源文学网_思源小说网_txt电子书下载_最新章节"
+	mapAttr["title"] = "test"
+	mapAttr["keywords"] = "思源文学网,免费小说阅读,免费小说下载,最新小说"
+	mapAttr["description"] = "思源文学网提供思源文学网最热门的小说，思源文学网是众多网友自发建立，多位热心书友上传很多珍藏孤本小说，思源文学网最懂你的小说网。"
+	mapAttr["host"] = "http://" + s.HOST + "/"
+	mapAttr["requestURL"] = "/"
+	mapAttr["resourceHost"] = "http://" + config.LOCAL_RESOURCE_DOMAIN_1 + "/"
 	map2[0] = mapAttr
 	map1["site"] = map2
 	map0["siteList"] = map1
@@ -179,7 +181,7 @@ func ( s*Seo ) Reg_Spider_www_haiax_net_index( text string  ) {
 	map0["hotbookList"] = map1         //data assets
 
 
-	/* map0["hotList"] 首页热门排行 */
+	/* map0["hotList"] 首页热门推荐 */
 	map1 = make( map[string]map[int]map[string]string )//重构
 	map2 = make( map[int]map[string]string   )//重构
 	doc.Find( "#main #hotlist .l .item" ).Each(func(i int, g *goquery.Selection) {

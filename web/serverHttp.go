@@ -2,8 +2,10 @@ package web
 
 import (
 	"fmt"
+	"github.com/johnlion/sites/config"
 	"github.com/johnlion/sites/proxy"
 	"net/http"
+	"path/filepath"
 )
 
 /*********************************************
@@ -14,17 +16,31 @@ import (
  * Desc:
  *********************************************/
 func (w *Web) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	res.WriteHeader(http.StatusOK)
-	/* 从数据库到得HTML内容 */
-	var html string
-	err, html := w.Router(req.RequestURI)
-	if err != nil { //没有取到,从远程服务器获取
-		ObjProxy := proxy.Proxy_constract(*target, *scheme, req, w.LocalDomain) //实例化代理
-		ObjProxy.ReProxy(res, req)
-		//time.Sleep( time.Second )
-	} else {
-		fmt.Fprint(res, html)
+
+	if req.Host == config.LOCAL_DOMAIN_DOMAIN_1 {
+		res.WriteHeader(http.StatusOK)
+		/* 从数据库到得HTML内容 */
+		var html string
+		err, html := w.Router(req.RequestURI)
+		if err != nil { //没有取到,从远程服务器获取
+
+			ObjProxy := proxy.Proxy_constract(*target, *scheme, req, w.LocalDomain) //实例化代理
+
+			ObjProxy.ReProxy(res, req)
+			//time.Sleep( time.Second )
+		} else {
+			fmt.Fprint(res, html)
+		}
+
 	}
+	w.Debug(req.Host)
+
+	if req.Host == config.LOCAL_RESOURCE_DOMAIN_1 {
+		path := config.TEMPLATE_BASE_DIR + req.URL.Path
+		w.Debug(filepath.Join("novel", path))
+		http.ServeFile(res, req, path)
+	}
+
 	/* Log */
 	//w.Log(  res.Header().Get( "User-Agent" ) )
 }

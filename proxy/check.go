@@ -1,4 +1,10 @@
 package proxy
+
+import (
+	"fmt"
+	"os"
+)
+
 /*********************************************
  * Author: chandlerxue
  * Email: xps_8@hotmail.com
@@ -6,8 +12,11 @@ package proxy
  * Func:
  * Desc:
  *********************************************/
-func ( p *Proxy ) Check(err error) {
+func (p *Proxy) Check(err error) {
 	if err != nil {
-		panic(err )
+		p.Debug("error")
+		fmt.Printf("%v", err)
+		os.Exit(1)
+
 	}
 }

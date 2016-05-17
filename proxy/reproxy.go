@@ -9,22 +9,20 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"github.com/djimenez/iconv-go"
-
+	//"github.com/djimenez/iconv-go"
+	"github.com/johnlion/mahonia"
 )
-
 
 func (p *Proxy) ReProxy(res http.ResponseWriter, req *http.Request) {
 
 	//数据库访问
-	if  p.dataExisted( res , req  ) {
+	if p.dataExisted(res, req) {
 		p.visitByDatabase(res, req)
-	}else{
+	} else {
 		//非数据库访问
-		p.visitByRemoteHost( res, req )
+		p.visitByRemoteHost(res, req)
 	}
 }
-
 
 func (p *Proxy) GetTransportFieldURL(proxy_addr string) (transport *http.Transport) {
 	url_i := url.URL{}
@@ -42,10 +40,9 @@ func (p *Proxy) CopyHeader(source http.Header, dest *http.Header) {
 	}
 }
 
-func (p *Proxy) CopyCookies( source http.Cookie, dest *http.Cookie ){
+func (p *Proxy) CopyCookies(source http.Cookie, dest *http.Cookie) {
 
 }
-
 
 /*********************************************
  * Author: chandlerxue
@@ -54,18 +51,23 @@ func (p *Proxy) CopyCookies( source http.Cookie, dest *http.Cookie ){
  * Func: dataExisted
  * Desc: 数据是否存在; 存在返回true,否则反回false
  *********************************************/
-func (p *Proxy) dataExisted ( res http.ResponseWriter, req *http.Request ) bool{
-	return p.RedisKeyExisted( req )
+func (p *Proxy) dataExisted(res http.ResponseWriter, req *http.Request) bool {
+	if config.REDIS == false {
+		return false
+	}
+	return p.RedisKeyExisted(req)
 }
 
-func (p *Proxy) visitByDatabase( res http.ResponseWriter, req *http.Request ){
-	p.Debug( "Redis model" )
-	body := ""
-	p.RedisServer( res, req ,body )
+func (p *Proxy) visitByDatabase(res http.ResponseWriter, req *http.Request) {
+	if config.REDIS == true {
+		p.Debug("Redis model")
+		body := ""
+		p.RedisServer(res, req, body)
+	}
 
 }
 
-func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
+func (p *Proxy) visitByRemoteHost(res http.ResponseWriter, req *http.Request) {
 	cookie1 := &http.Cookie{Name: "sample", Value: "sample", HttpOnly: false}
 	http.SetCookie(res, cookie1)
 	originReq, err := http.NewRequest(req.Method, p.Url, req.Body)
@@ -96,24 +98,19 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 			continue
 		}
 
-
 		dH := res.Header()
-
 
 		p.CopyHeader(originResp.Header, &dH)
 		dH.Add("Requested-Host", originReq.Host)
 
+		var dec mahonia.Decoder
+		html := string(body)
 
-		out:=make([]byte,len(body) *2 )
-		out=out[:]
-		_ , _, err = iconv.Convert( body, out, "gbk", "utf-8" )
-		if err == nil {
-			//ioutil.WriteFile("output.html", out, 0666)
-
-
+		dec = mahonia.NewDecoder("gbk")
+		if html, ok := dec.ConvertStringOK(html); ok {
 			//SEO && DECODE
-			html := string(out)
-			ObjSeo := seo.Seo_constract( req, p.Target, p.Scheme)
+
+			ObjSeo := seo.Seo_constract(req, p.Target, p.Scheme)
 			resourceHtml := ObjSeo.RegProcess(html)
 
 			html = string(resourceHtml)
@@ -122,14 +119,12 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 			}
 			res.Write(resourceHtml)
 			break
-		}else{
+		} else {
 			//SEO && DECODE
-			html := string(body)
-			ObjSeo := seo.Seo_constract( req ,p.Target, p.Scheme)
+			ObjSeo := seo.Seo_constract(req, p.Target, p.Scheme)
 			resourceHtml := ObjSeo.RegProcess(html)
 
 			html = string(resourceHtml)
-
 			if config.REDIS {
 				p.RequestUrLFileGroupSave(req, html)
 			}
@@ -137,39 +132,66 @@ func (p *Proxy) visitByRemoteHost( res http.ResponseWriter, req *http.Request ){
 			break
 		}
 
-
-
-
+		//_ , _, err = iconv.Convert( body, out, "gbk", "utf-8" )
+		//if err == nil {
+		//	//ioutil.WriteFile("output.html", out, 0666)
+		//
+		//
+		//	//SEO && DECODE
+		//	html := string(out)
+		//	ObjSeo := seo.Seo_constract( req, p.Target, p.Scheme)
+		//	resourceHtml := ObjSeo.RegProcess(html)
+		//
+		//	html = string(resourceHtml)
+		//	if config.REDIS {
+		//		p.RequestUrLFileGroupSave(req, html)
+		//	}
+		//	res.Write(resourceHtml)
+		//	break
+		//}else{
+		//	//SEO && DECODE
+		//	html := string(body)
+		//	ObjSeo := seo.Seo_constract( req ,p.Target, p.Scheme)
+		//	resourceHtml := ObjSeo.RegProcess(html)
+		//
+		//	html = string(resourceHtml)
+		//
+		//	if config.REDIS {
+		//		p.RequestUrLFileGroupSave(req, html)
+		//	}
+		//	res.Write(resourceHtml)
+		//	break
+		//}
 
 		//输出正常编码数据
 		/*
-		if mahonia.GetCharset(html) == nil {
-			p.RequestUrLFileGroupSave(req, html)
-			//saveDataToRedis( replacedHtml )
-			res.Write([]byte(html))
-			//res.WriteHeader( 200 )
-			//fmt.Fprint( res, html )
-			break
-		} else {
-			enc := mahonia.NewEncoder("utf8")
-			dec := mahonia.NewDecoder("utf8")
-			html, ok := dec.ConvertStringOK(html)
-			if ok {
+			if mahonia.GetCharset(html) == nil {
 				p.RequestUrLFileGroupSave(req, html)
+				//saveDataToRedis( replacedHtml )
 				res.Write([]byte(html))
+				//res.WriteHeader( 200 )
+				//fmt.Fprint( res, html )
 				break
-			}
-			dec = mahonia.NewDecoder("gb18030")
-			html, ok = dec.ConvertStringOK(html)
-			if ok {
-				html, ok = enc.ConvertStringOK(html)
+			} else {
+				enc := mahonia.NewEncoder("utf8")
+				dec := mahonia.NewDecoder("utf8")
+				html, ok := dec.ConvertStringOK(html)
 				if ok {
 					p.RequestUrLFileGroupSave(req, html)
 					res.Write([]byte(html))
 					break
 				}
+				dec = mahonia.NewDecoder("gb18030")
+				html, ok = dec.ConvertStringOK(html)
+				if ok {
+					html, ok = enc.ConvertStringOK(html)
+					if ok {
+						p.RequestUrLFileGroupSave(req, html)
+						res.Write([]byte(html))
+						break
+					}
+				}
 			}
-		}
 		*/
 	}
 }

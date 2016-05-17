@@ -70,3 +70,10 @@ const(
 const(
 	TEMPLATE_BASE_DIR = "template/novel"
 )
+const(
+	LOCAL_DOMAIN_DOMAIN_1 = "test.sydscience.com"
+	LOCAL_DOMAIN_BIND_IP_PORT_1 = ":80"
+
+	LOCAL_RESOURCE_DOMAIN_1 = "res.sydscience.com"
+	LOCAL_RESOURCE_DOMAIN_BIND_IP_PORT_1 = ":80"
+)

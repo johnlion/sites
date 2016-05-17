@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strings"
 	"github.com/garyburd/redigo/redis"
+	//"path/filepath"
 )
 
 /*********************************************
@@ -79,9 +80,10 @@ func (p *Proxy) GetProxyList(file string) ([]string, error) {
  * desc:文件行,返回[]bytes,否则反回 nil
  * ****************************************/
 func (p *Proxy) ReadLine(filePath string, hookfn func([]byte)) error {
-	currentDir := p.GetCurrentPath()       //当前文件夹
-	filePath = currentDir + "/" + filePath //文件名称
-	file, err := os.Open(filePath)
+	//currentDir := p.GetCurrentPath()       //当前文件夹
+	//filePath = currentDir + "/" + filePath //文件名称
+	//filepath :=
+	file, err := os.Open("proxy.txt")
 
 	if err != nil {
 		log.Fatal(err)

@@ -28,7 +28,7 @@ func ( f *Forwardserver ) RunWebServer( ){
 
 	/* 多服务器组设置 正向  */
 	f.Server =  map[int]*http.Server{
-		1: &http.Server{ Addr: "127.0.0.1:8090", Handler: f,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
+		1: &http.Server{ Addr: config.LOCAL_RESOURCE_1, Handler: f,ReadTimeout:    config.HTTP_READ_TIME_OUT, WriteTimeout:   config.HTTP_WRITE_TIME_OUT, MaxHeaderBytes: 1 << 20,},
 
 		//more server...
 	}
